@@ -1,15 +1,10 @@
 # Function to parse TCX data
 parseTCXData <- function(file) {
-  tcx <- read_xml(file$datapath)
+  tcx <- readTCX(file$datapath, timezone = "GMT")
   
   # Extract distance and time information from TCX data
-  time <- xml_find_all(tcx, "//Trackpoint/Time") %>%
-    xml_text() %>%
-    as.POSIXct(format = "%Y-%m-%dT%H:%M:%S", tz = "UTC")
-  
-  distance <- xml_find_all(tcx, "//Trackpoint/DistanceMeters") %>%
-    xml_text() %>%
-    as.numeric()
+  time <- tcx$time
+  distance <- tcx$distance
   
   # Create a data frame with the extracted information
   data <- data.frame(Time = time, DistanceMeters = distance)
