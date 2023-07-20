@@ -1,14 +1,3 @@
-observeEvent(input$tabs,{
-  selected_tab <- input$tabs
-  if (selected_tab == "1") {
-    # If the first tab is selected, show the fileInput
-    updateSidebarPanel(session, "file", style = "display: block;")
-  } else {
-    # Otherwise, hide the fileInput
-    updateSidebarPanel(session, "file", style = "display: none;")
-  }
-})
-
 # Function to parse TCX data
 parseTCXData <- function(file) {
   tcx <- readTCX(file$datapath, timezone = "GMT")

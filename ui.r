@@ -1,4 +1,3 @@
-
 ui <- fluidPage(
   titlePanel("TCX Data Analysis"),
   sidebarLayout(
