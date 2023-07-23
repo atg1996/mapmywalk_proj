@@ -1,5 +1,5 @@
 library(httr)
-
+#
 get_elevation <- function(latitude, longitude) {
   base_url <- "https://api.open-elevation.com/api/v1/lookup"
   query_params <- list(locations = paste(latitude, longitude, sep = ","))
