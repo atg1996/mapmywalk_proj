@@ -53,6 +53,6 @@ server <- function(input, output) {
     ggplot(data, aes(x = Time, y = DistanceMeters)) +
       geom_line() +
       labs(x = "Time", y = "Distance (Meters)") +
-      theme_minimal()
+      theme_bw()
   })
 }
