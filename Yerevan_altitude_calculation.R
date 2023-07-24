@@ -23,6 +23,6 @@ longitude <- 44.513614322344765
 altitude <- get_elevation(latitude, longitude)
 
 if (!is.null(altitude)) {
-  cat("The altitude at latitude", latitude, "longitude", longitude, "is", altitude, "meters.\n")
+  cat("The altitude at latitude", latitude, "longitude", longitude, "is", altitude, "meters.\n") 
 }
 
