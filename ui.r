@@ -13,9 +13,25 @@ ui <- tagList(
         width = 4
       ),
       mainPanel(
-        plotOutput("distance_plot"),
-        leafletOutput("map"),
-        width = 8
+        fluidRow(
+          column(width = 6,
+                 plotOutput("density_plot_ggplot")  # Display the ggplot density plot here
+          ),
+          column(width = 6,
+                 leafletOutput("map")
+          )
+        ),
+        fluidRow(
+          column(width = 6,
+                 plotOutput("distance_plot")
+          ),
+          column(width = 6,
+                 # Add your ggplot graphs here using plotOutput
+                 plotOutput("ggplot_graph1"),
+                 plotOutput("ggplot_graph2"),
+                 plotOutput("ggplot_graph3")
+          )
+        )
       )
     )
   )

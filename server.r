@@ -25,24 +25,13 @@ extractGPSData <- function(data) {
   return(gps_data)
 }
 
+
+
+
+
 # Define Server
 server <- function(input, output) {
-  observeEvent(input$file, {
-    req(input$file$datapath)  # Check if a file is uploaded
-    tcx_data <- readTCX(input$file$datapath)  # Replace readTCX with your own function to read TCX data
-    gps_data <- extractGPSData(tcx_data)  # Replace extractGPSData with your own function to extract GPS data
-    
-    # Plot the GPS data on the map
-    output$map <- renderLeaflet({
-      leaflet() %>%
-        addProviderTiles(provider = "OpenStreetMap") %>%
-        addPolylines(data = gps_data, 
-                     lat = ~latitude, 
-                     lng = ~longitude, 
-                     color = "red", 
-                     weight = 3)
-    })
-  })
+
   
   # Generate distance over time plot
   output$distance_plot <- renderPlot({
@@ -52,7 +41,34 @@ server <- function(input, output) {
     
     ggplot(data, aes(x = Time, y = DistanceMeters)) +
       geom_line() +
-      labs(x = "Time", y = "Distance (Meters)") +
+      labs(x = "Time", y = "Distance (Meters)", title = "Correlation between Time and passed distance") +
       theme_bw()
+  })
+  
+  #generate density plot
+  output$density_plot_ggplot <- renderPlot({
+    req(input$file)
+    data <- parseTCXData(input$file)
+    
+    ggplot(data, aes(x = Time, y = DistanceMeters)) +
+      geom_density_2d() +
+      labs(x = "Time", y = "Distance (Meters)", title = "Density Plot of GPS Points") +
+      theme_bw()
+  })
+  
+  
+  #functionality connected with map generation
+  observeEvent(input$file, {
+    req(input$file$datapath)  # Check if a file is uploaded
+    tcx_data <- readTCX(input$file$datapath)  # Replace readTCX with your own function to read TCX data
+    gps_data <- extractGPSData(tcx_data)  # Replace extractGPSData with your own function to extract GPS data
+    
+    # Plot the GPS data on the map
+    output$map <- renderLeaflet({
+      leaflet() %>%
+        addProviderTiles(provider = "Esri.WorldGrayCanvas") %>%
+        addPolylines(data = gps_data, lat = ~latitude, lng = ~longitude, 
+                     color = "red", weight = 3)
+    })
   })
 }
