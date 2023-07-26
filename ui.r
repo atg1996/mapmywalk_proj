@@ -6,7 +6,7 @@ ui <- tagList(
     "))
   ),
   fluidPage(
-    titlePanel("TCX Data Analysis"),
+    titlePanel("Walking Data Analysis"),
     sidebarLayout(
       sidebarPanel(
         fileInput("file", "Upload TCX file"),
