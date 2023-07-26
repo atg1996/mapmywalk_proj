@@ -26,8 +26,13 @@ ui <- tagList(
         ),
         fluidRow(
           column(width = 6,
+                 plotOutput("altitude_plot")
                  
           ),
+          column(width = 6,
+                 plotOutput("density_plot_ggplot2")  # Display the ggplot density plot here
+                 
+          )
         )
       )
     )
