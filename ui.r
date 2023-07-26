@@ -10,27 +10,24 @@ ui <- tagList(
     sidebarLayout(
       sidebarPanel(
         fileInput("file", "Upload TCX file"),
+        leafletOutput("map"),
         width = 4
       ),
       mainPanel(
         fluidRow(
           column(width = 6,
-                 plotOutput("density_plot_ggplot")  # Display the ggplot density plot here
+                 plotOutput("distance_plot")
+                 
           ),
           column(width = 6,
-                 leafletOutput("map")
+                 plotOutput("density_plot_ggplot")  # Display the ggplot density plot here
+                 
           )
         ),
         fluidRow(
           column(width = 6,
-                 plotOutput("distance_plot")
+                 
           ),
-          column(width = 6,
-                 # Add your ggplot graphs here using plotOutput
-                 plotOutput("ggplot_graph1"),
-                 plotOutput("ggplot_graph2"),
-                 plotOutput("ggplot_graph3")
-          )
         )
       )
     )

@@ -31,7 +31,6 @@ extractGPSData <- function(data) {
 
 # Define Server
 server <- function(input, output) {
-
   
   # Generate distance over time plot
   output$distance_plot <- renderPlot({
@@ -45,6 +44,9 @@ server <- function(input, output) {
       theme_bw()
   })
   
+  
+  
+  
   #generate density plot
   output$density_plot_ggplot <- renderPlot({
     req(input$file)
@@ -55,6 +57,9 @@ server <- function(input, output) {
       labs(x = "Time", y = "Distance (Meters)", title = "Density Plot of GPS Points") +
       theme_bw()
   })
+  
+  
+  
   
   
   #functionality connected with map generation
