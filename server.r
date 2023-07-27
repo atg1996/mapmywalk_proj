@@ -72,23 +72,25 @@ server <- function(input, output) {
   #generate density plot
   output$density_plot_ggplot2 <- renderPlot({
     req(input$file)
+    
     data <- parseTCXData(input$file)
     
-    ggplot(data, aes(x = Time, y = DistanceMeters)) +
-      geom_density_2d() +
-      labs(x = "Time", y = "Distance (Meters)", title = "Density Plot of GPS Points") +
+    # Calculate distance covered between consecutive points
+    data$DistanceCovered <- c(0, diff(data$DistanceMeters))
+    
+    # Create a scatter plot for distance covered
+    ggplot(data, aes(x = as.POSIXct(Time, origin = "1970-01-01"), y = DistanceCovered)) +
+      geom_point(color = "blue") +
+      labs(x = "Time", y = "Distance Covered (Meters)", title = "Distance Covered between neighbor Points") +
+      scale_x_datetime(date_breaks = "1 hour", date_labels = "%H:%M") +
       theme_bw()
   })
   
-  
-  
-  
-  
   #functionality connected with map generation
   observeEvent(input$file, {
-    req(input$file$datapath)  # Check if a file is uploaded
-    tcx_data <- readTCX(input$file$datapath)  # Replace readTCX with your own function to read TCX data
-    gps_data <- extractGPSData(tcx_data)  # Replace extractGPSData with your own function to extract GPS data
+    req(input$file$datapath) 
+    tcx_data <- readTCX(input$file$datapath) 
+    gps_data <- extractGPSData(tcx_data)
     
     # Get the start and end coordinates
     start_lat <- gps_data$latitude[1]
