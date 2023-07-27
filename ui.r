@@ -6,7 +6,8 @@ ui <- tagList(
     "))
   ),
   fluidPage(
-    titlePanel("Walking Data Analysis"),
+    tabsetPanel(
+      tabPanel("Wlking Data Analysis",
     sidebarLayout(
       sidebarPanel(
         fluidRow(
@@ -22,7 +23,8 @@ ui <- tagList(
                  the pedestrian comfort levels concerning pavement conditions.
                  In this application, GPS data is meticulously analyzed and presented
                  through charts to facilitate insightful research. These charts
-                 collectively furnish substantial information for comprehensive examination.
+                 collectively furnish substantial information for comprehensive
+                 examination.
                  "),
                  
                  h6("The first chart elucidates the correlation between time and
@@ -51,7 +53,8 @@ ui <- tagList(
                  which presents a broader overview and highlights major obstacles,
                  this graph delves into finer details, enabling a precise assessment
                  of pavement quality and its impact on pedestrian flow. This localized
-                 information proves crucial for targeted interventions to enhance pedestrian comfort and safety.
+                 information proves crucial for targeted interventions to enhance 
+                 pedestrian comfort and safety.
                  ")),
                 
         ),
@@ -63,7 +66,7 @@ ui <- tagList(
                  
           ),
           column(width = 6,
-                 plotOutput("density_plot_ggplot")  # Display the ggplot density plot here
+                 plotOutput("density_plot_ggplot")
                  
           )
         ),
@@ -73,11 +76,14 @@ ui <- tagList(
                  
           ),
           column(width = 6,
-                 plotOutput("density_plot_ggplot2")  # Display the ggplot density plot here
+                 plotOutput("pace_plot")
                  
           )
         )
       )
+    )
+  ),
+  tabPanel("Wlking Data Analysis")
     )
   )
 )

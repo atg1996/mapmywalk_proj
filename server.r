@@ -2,12 +2,10 @@
 parseTCXData <- function(file) {
   tcx <- readTCX(file$datapath, timezone = "GMT")
   
-  # Extract distance and time information from TCX data
   time <- tcx$time
   distance <- tcx$distance
   altitude <- tcx$altitude
   
-  # Create a data frame with the extracted information
   data <- data.frame(Time = time, DistanceMeters = distance, Altitude = altitude)
   return(data)
 }
@@ -28,10 +26,6 @@ extractGPSData <- function(data) {
 }
 
 
-
-
-
-# Define Server
 server <- function(input, output) {
 
   
@@ -43,7 +37,7 @@ server <- function(input, output) {
     
     ggplot(data, aes(x = Time, y = DistanceMeters)) +
       geom_line() +
-      labs(x = "Time", y = "Distance (Meters)", title = "Correlation between Time and passed distance") +
+      labs(x = "Time", y = "Distance (Meters)", title = "Distance passed over time") +
       theme_bw()
   })
   
@@ -69,8 +63,8 @@ server <- function(input, output) {
       theme_bw()
   })
   
-  #generate density plot
-  output$density_plot_ggplot2 <- renderPlot({
+  #generate pace plot
+  output$pace_plot <- renderPlot({
     req(input$file)
     
     data <- parseTCXData(input$file)
@@ -104,8 +98,10 @@ server <- function(input, output) {
         addProviderTiles(provider = "Esri.WorldGrayCanvas") %>%
         addPolylines(data = gps_data, lat = ~latitude, lng = ~longitude, 
                      color = "red", weight = 3) %>%
-        addMarkers(lat = start_lat, lng = start_lng, label = "Start", icon = leaflet::makeIcon(iconUrl = "https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-green.png")) %>%
-        addMarkers(lat = end_lat, lng = end_lng, label = "End", icon = leaflet::makeIcon(iconUrl = "https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-red.png"))
+        addMarkers(lat = start_lat, lng = start_lng, label = "Start",
+                   icon = leaflet::makeIcon(iconUrl = "https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-green.png")) %>%
+        addMarkers(lat = end_lat, lng = end_lng, label = "End",
+                   icon = leaflet::makeIcon(iconUrl = "https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-red.png"))
     })
   })
 }
