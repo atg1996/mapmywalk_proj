@@ -54,7 +54,7 @@ server <- function(input, output) {
     
     ggplot(data, aes(x = Time, y = Altitude)) +
       geom_line() +
-      labs(x = "Time", y = "Altitude (Meters)", title = "Correlation between Time and altitude") +
+      labs(x = "Time", y = "Altitude (Meters)", title = "Change of altitude durinng walk") +
       theme_bw()
   })
   
