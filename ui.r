@@ -7,7 +7,7 @@ ui <- tagList(
   ),
   fluidPage(
     tabsetPanel(
-      tabPanel("Wlking Data Analysis",
+      tabPanel("Walking Data Analysis",
     sidebarLayout(
       sidebarPanel(
         fluidRow(
@@ -17,7 +17,7 @@ ui <- tagList(
         ),
         fluidRow(
           column(width = 12,
-                 h3("How the data is being analyzed?"),
+                 h4("How the data is being analyzed?"),
                  
                  h6("One of the key objectives in urban planning is to assess
                  the pedestrian comfort levels concerning pavement conditions.
@@ -83,7 +83,7 @@ ui <- tagList(
       )
     )
   ),
-  tabPanel("Wlking Data Analysis")
+  tabPanel("Walking Data Analysis")
     )
   )
 )

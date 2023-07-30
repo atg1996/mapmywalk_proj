@@ -1,0 +1,127 @@
+---
+title: "Exploring Key Factors Contributing to Car Accidents and Dispelling Correlation Myths"
+output: pdf_document
+author: "Hovhannes Garoyan, Hrach Khachatryan, Asya Khachatryan, Davit Nazaryan, Tigran Asatryan"
+date: "2023-07-29"
+---
+
+
+Data Description:
+The dataset imported from the XLSX file comprises a comprehensive collection of car accident records, including demographic information about drivers such as gender and age. It also encompasses data about the vehicles involved, such as car brand and year of production. Additionally, the dataset contains information about the accident locations, specifying regions and streets, as well as the month in which the accidents occurred. Prior to analysis, standard data preprocessing techniques were employed to address any missing values and ensure consistency in data types.
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r, echo=F,eval=T}
+library(readxl)
+library(ggplot2)
+library(dplyr)
+library(leaflet)
+```
+
+
+```{r}
+car_accidents_data <- read_excel("Car accidents.xlsx")
+car_accidents_data_yerevan <- car_accidents_data %>%
+  filter(region == "Yerevan")
+str(car_accidents_data_yerevan)
+```
+First of all let us get the general image of the accidents divided by gender
+
+```{r}
+ggplot(car_accidents_data_yerevan, aes(x = gender)) +
+  geom_bar(fill = "skyblue", color = "black") +
+  labs(title = "Gender Distribution of Car Accidents",
+       x = "Gender",
+       y = "Number of Accidents") +
+  theme_minimal()
+```
+What we see here is that women contribute to the total number of accidents way less than med do , however this does not mean that generally women are better drivers, the main reason is that in Armenia women drive less then men , and professions like taxi or bus drivers are totally male dominated. However if we look simply at the numbers, Men contribute more.
+
+Another crucial point is the age of the car.
+```{r}
+ggplot(car_accidents_data_yerevan, aes(x = car_year)) +
+  geom_point(aes(y = ..count..), stat = "bin", fill = "skyblue", color = "black") +
+  labs(title = "Car Year vs. Number of Accidents",
+       x = "Car Year",
+       y = "Number of Accidents") +
+  theme_minimal()
+```
+As we can see here , in Armenia we have a huge problem connected with old cars. The majority of the cars that caused accidents are more than 20 years old. Let us viualise and see if there is a correaltion between the gender of the driver and the age of the car.
+
+```{r}
+ggplot(car_accidents_data_yerevan, aes(x = car_year, y = age, color = gender)) +
+  geom_point() +
+  labs(title = "Age of Car vs. Driver's Age (Colored by Gender)",
+       x = "Car Year",
+       y = "Driver's Age",
+       color = "Gender") +
+  theme_minimal()
+```
+One thing that we can see from this chart is that some of the clashes were caused by the underage drivers. In this age group males lead, only one case of underage girl driver in Yerevan
+```{r}
+grouped_data <- car_accidents_data_yerevan %>%
+  group_by(accident_place) %>%
+  summarise(num_accidents = n()) %>%
+  arrange(desc(num_accidents))
+
+# Print the grouped and ordered data
+head(grouped_data)
+```
+
+
+
+```{r}
+grouped_data_female <- car_accidents_data_yerevan %>%
+  filter(gender == "Female") %>%
+  group_by(accident_place) %>%
+  summarise(num_accidents = n()) %>%
+  arrange(desc(num_accidents))
+
+# Print the grouped and ordered data
+head(grouped_data_female)
+```
+
+
+```{r}
+grouped_data_month <- car_accidents_data_yerevan %>%
+  group_by(months) %>%
+  summarise(num_accidents = n()) %>%
+  arrange(desc(num_accidents))
+
+# Print the grouped and ordered data
+head(grouped_data_month)
+```
+
+```{r}
+ggplot(grouped_data_month, aes(x = months, y = num_accidents)) +
+  geom_line() +
+  geom_point() +
+  labs(title = "Number of Accidents by Month",
+       x = "Month",
+       y = "Number of Accidents") +  # Custom x-axis labels for months
+  theme_minimal()
+```
+here we can see that weather conditions do have influence on the accident numbers. It is logical that during december there are more accidents than during summer, however there is an outlier here. During April there is a anomally low number of accidents. What is the reason ? This is clearly not the weather, because during summer the weather is far better than during April One of the possible reasons can be spring break in schools and universities and not yet started turistic season in the city.
+
+```{r}
+
+mysanikyan_data <- car_accidents_data_yerevan %>%
+  filter(accident_place == "Myasnikyan") %>%
+  group_by(months) %>%
+  summarise(num_accidents = n()) %>%
+  arrange(desc(num_accidents))
+  
+
+
+ggplot(mysanikyan_data, aes(x = months, y = num_accidents)) +
+  geom_line() +
+  geom_point() +
+  labs(title = "Number of Accidents by Month(Myasnikyan)",
+       x = "Month",
+       y = "Number of Accidents") +  # Custom x-axis labels for months
+  theme_minimal()
+```
+
