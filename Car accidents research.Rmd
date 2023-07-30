@@ -1,13 +1,17 @@
 ---
-title: "Exploring Key Factors Contributing to Car Accidents and Dispelling Correlation Myths"
+title: "Exploring Key Factors Contributing to Car Accidents in Yerevan and Dispelling Correlation Myths"
 output: pdf_document
 author: "Hovhannes Garoyan, Hrach Khachatryan, Asya Khachatryan, Davit Nazaryan, Tigran Asatryan"
 date: "2023-07-29"
 ---
+Abstract:
+This data research report investigates the factors influencing car accidents in the city of Yerevan. By analyzing a comprehensive dataset, this study aims to identify the key contributors to car accidents and debunk any correlation myths associated with accident occurrences. The findings from this research can serve as valuable insights for implementing targeted road safety measures and enhancing accident prevention strategies in Yerevan.
 
+Methodology:
+The data research employs a rigorous analytical approach to study the various attributes associated with car accidents in Yerevan. Utilizing a comprehensive dataset, statistical analyses and data visualization techniques are employed to identify the most influential factors and establish their correlations with accident rates.
 
 Data Description:
-The dataset imported from the XLSX file comprises a comprehensive collection of car accident records, including demographic information about drivers such as gender and age. It also encompasses data about the vehicles involved, such as car brand and year of production. Additionally, the dataset contains information about the accident locations, specifying regions and streets, as well as the month in which the accidents occurred. Prior to analysis, standard data preprocessing techniques were employed to address any missing values and ensure consistency in data types.
+The dataset comprises a comprehensive collection of car accident records, including demographic information about drivers such as gender and age. It also encompasses data about the vehicles involved, such as car brand and year of production. Additionally, the dataset contains information about the accident locations, specifying regions and streets, as well as the month in which the accidents occurred. Prior to analysis, standard data preprocessing techniques were employed to address any missing values and ensure consistency in data types.
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
@@ -20,15 +24,32 @@ library(ggplot2)
 library(dplyr)
 library(leaflet)
 ```
+  Armenia as a former part of Soviet Union got higher numbers of automobilization only after collapse of the USSR. in the 1990s the safety measures connected with road traffic were not well organized and road deaths were common among citizens. The terrain of the country was another challenge itself.Whole country is very mountainous , especially the southern provinces(Marz) called Vayots Dzor and Syunik. These two regions are very crucial as they represent the main artery that connects Yerevan with Iran.
+  During late 2000s and early 2010s the automobilization rates became even higher with a boom started from 2017-18 and capital city Yerevan started experiencing traffic jams and car accidents. This influx of cheap cars were mainly from Germany , Korea , Japan, America and of course Russia.
+  In this research we are interested in the years after 2015 and mainly in the Yerevan area.
 
 
 ```{r}
 car_accidents_data <- read_excel("Car accidents.xlsx")
+
+ggplot(car_accidents_data, aes(x = region)) +
+  geom_bar(fill = "skyblue", color = "black") +
+  labs(title = "Regional Distribution of Car Accidents",
+       x = "Region",
+       y = "Number of Accidents") +
+  theme_minimal()
+
+```
+As we can see the capital city is the absolute leader here. There can be a lot of reasons why this is happening. first of all bout 1/3 of the population in armenia is located in Yerevan, thus making it the biggest city with the highest traffic flow in the country. Our primary interest is Yerevan, so from this point on we are going to investigate the numbers from Yerevan.
+
+
+```{r}
+
 car_accidents_data_yerevan <- car_accidents_data %>%
   filter(region == "Yerevan")
 str(car_accidents_data_yerevan)
 ```
-First of all let us get the general image of the accidents divided by gender
+Let us get the general image of the accidents divided by gender in Yerevan.
 
 ```{r}
 ggplot(car_accidents_data_yerevan, aes(x = gender)) +
@@ -49,7 +70,7 @@ ggplot(car_accidents_data_yerevan, aes(x = car_year)) +
        y = "Number of Accidents") +
   theme_minimal()
 ```
-As we can see here , in Armenia we have a huge problem connected with old cars. The majority of the cars that caused accidents are more than 20 years old. Let us viualise and see if there is a correaltion between the gender of the driver and the age of the car.
+As we can see here , in Armenia we have a huge problem connected with old cars. The majority of the cars that caused accidents are more than 20 years old. Let us visualize and see if there is a correaltion between the gender of the driver and the age of the car.
 
 ```{r}
 ggplot(car_accidents_data_yerevan, aes(x = car_year, y = age, color = gender)) +
@@ -60,7 +81,7 @@ ggplot(car_accidents_data_yerevan, aes(x = car_year, y = age, color = gender)) +
        color = "Gender") +
   theme_minimal()
 ```
-One thing that we can see from this chart is that some of the clashes were caused by the underage drivers. In this age group males lead, only one case of underage girl driver in Yerevan
+We can clearly see here that female drivers are present among all driver ages and drive both new and old cars.One thing that we can see from this chart is that some of the clashes were caused by the underage drivers. In this age group males lead, only one case of underage girl driver in Yerevan
 ```{r}
 grouped_data <- car_accidents_data_yerevan %>%
   group_by(accident_place) %>%
