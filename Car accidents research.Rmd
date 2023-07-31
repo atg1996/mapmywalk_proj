@@ -24,9 +24,11 @@ library(ggplot2)
 library(dplyr)
 library(leaflet)
 ```
-  Armenia as a former part of Soviet Union got higher numbers of automobilization only after collapse of the USSR. in the 1990s the safety measures connected with road traffic were not well organized and road deaths were common among citizens. The terrain of the country was another challenge itself.Whole country is very mountainous , especially the southern provinces(Marz) called Vayots Dzor and Syunik. These two regions are very crucial as they represent the main artery that connects Yerevan with Iran.
-  During late 2000s and early 2010s the automobilization rates became even higher with a boom started from 2017-18 and capital city Yerevan started experiencing traffic jams and car accidents. This influx of cheap cars were mainly from Germany , Korea , Japan, America and of course Russia.
-  In this research we are interested in the years after 2015 and mainly in the Yerevan area.
+  Armenia, formerly part of the Soviet Union, witnessed a notable surge in automobile ownership following the collapse of the USSR. However, during the 1990s, the country faced significant challenges in organizing road safety measures, resulting in a high incidence of road fatalities among its citizens. The rugged terrain, particularly in the southern provinces of Vayots Dzor and Syunik, further compounded the road safety concerns. Notably, these regions play a critical role as they serve as the primary transportation link connecting Yerevan, the capital city, with Iran.
+
+Subsequently, in the late 2000s and early 2010s, the automobile ownership rates experienced further growth, reaching a peak around 2017-18. This surge in vehicle numbers led to increased traffic congestion and a rise in car accidents in Yerevan. The influx of affordable cars mainly originated from countries such as Germany, Korea, Japan, America, and Russia.
+
+In the context of this research, our focus lies on the period after 2015, with particular attention to the Yerevan area. Understanding the dynamics of automobile usage and accident patterns in this specific timeframe and geographical region is of primary interest in our study.
 
 
 ```{r}
@@ -37,17 +39,19 @@ ggplot(car_accidents_data, aes(x = region)) +
   labs(title = "Regional Distribution of Car Accidents",
        x = "Region",
        y = "Number of Accidents") +
-  theme_minimal()
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
 
 ```
-As we can see the capital city is the absolute leader here. There can be a lot of reasons why this is happening. first of all bout 1/3 of the population in armenia is located in Yerevan, thus making it the biggest city with the highest traffic flow in the country. Our primary interest is Yerevan, so from this point on we are going to investigate the numbers from Yerevan.
+The data analysis reveals that the capital city, Yerevan, stands out as the dominant region in terms of various metrics. This prominence can be attributed to several factors. Firstly, Yerevan houses approximately one-third of Armenia's total population, making it the most populous city with the highest concentration of traffic activity across the country. Consequently, the sheer size of its population contributes to a significant traffic flow within the city.
+
+Given our research focus on Yerevan, we will now shift our investigation exclusively to the data pertaining to this city. By concentrating on Yerevan's specific data, we aim to gain deeper insights into the patterns and trends unique to the capital, which will facilitate a more comprehensive understanding of its automobile usage and road safety dynamics.
 
 
 ```{r}
 
 car_accidents_data_yerevan <- car_accidents_data %>%
   filter(region == "Yerevan")
-str(car_accidents_data_yerevan)
 ```
 Let us get the general image of the accidents divided by gender in Yerevan.
 
@@ -59,7 +63,13 @@ ggplot(car_accidents_data_yerevan, aes(x = gender)) +
        y = "Number of Accidents") +
   theme_minimal()
 ```
-What we see here is that women contribute to the total number of accidents way less than med do , however this does not mean that generally women are better drivers, the main reason is that in Armenia women drive less then men , and professions like taxi or bus drivers are totally male dominated. However if we look simply at the numbers, Men contribute more.
+The data analysis indicates a notable disparity between men and women concerning their contributions to the total number of accidents. It is evident that men are involved in a significantly higher number of accidents compared to women. However, it is essential to interpret these findings with caution and avoid generalizing that women are inherently better drivers.
+
+One key factor influencing this observation is the difference in driving behavior and habits between genders in Armenia. Women, on average, drive less frequently than men. Additionally, certain professions, such as taxi or bus driving, are predominantly male-dominated, which further skews the accident statistics towards male drivers.
+
+It is crucial to emphasize that the higher number of accidents involving men is not indicative of their driving skills or abilities. Instead, it reflects the underlying demographic and societal factors that influence driving patterns in Armenia.
+
+In summary, although men contribute more to the total number of accidents in raw figures, it is essential to consider the context and driving patterns when interpreting these statistics and refrain from making broad assumptions about driving skills based solely on gender.
 
 Another crucial point is the age of the car.
 ```{r}
@@ -70,7 +80,11 @@ ggplot(car_accidents_data_yerevan, aes(x = car_year)) +
        y = "Number of Accidents") +
   theme_minimal()
 ```
-As we can see here , in Armenia we have a huge problem connected with old cars. The majority of the cars that caused accidents are more than 20 years old. Let us visualize and see if there is a correaltion between the gender of the driver and the age of the car.
+The data reveals a significant concern related to the prevalence of old cars in Armenia, particularly in connection with car accidents. A majority of the vehicles involved in accidents are aged over 20 years. To gain further insights into this issue, we will conduct a visualization to explore any potential correlation between the gender of the driver and the age of the car.
+
+By visually analyzing the data, we aim to identify any patterns or trends that may emerge between the gender of the driver and the age of the car at the time of the accidents. This analysis will help us understand if there is any relationship between the two variables and provide valuable information for potential policy interventions or safety measures.
+
+By conducting this correlation analysis, we can shed light on the impact of older vehicles on road safety and ascertain if there are any gender-specific associations with the age of the cars involved in accidents. Ultimately, the findings from this visualization will contribute to a better understanding of the dynamics between driver gender and car age in the context of road accidents in Armenia.
 
 ```{r}
 ggplot(car_accidents_data_yerevan, aes(x = car_year, y = age, color = gender)) +
@@ -81,7 +95,17 @@ ggplot(car_accidents_data_yerevan, aes(x = car_year, y = age, color = gender)) +
        color = "Gender") +
   theme_minimal()
 ```
-We can clearly see here that female drivers are present among all driver ages and drive both new and old cars.One thing that we can see from this chart is that some of the clashes were caused by the underage drivers. In this age group males lead, only one case of underage girl driver in Yerevan
+The visualization provides valuable insights into the distribution of female drivers across various age groups and the types of cars they drive, including both new and old vehicles. Notably, female drivers are present across all age categories, suggesting their active involvement in driving across different stages of life and with diverse car models.
+
+An essential observation from the chart is that some of the accidents were caused by underage drivers. In this specific age group, male drivers dominate the statistics, with only one reported case of an underage female driver involved in an accident in Yerevan.
+
+This data highlights the significance of addressing the issue of underage driving and its potential association with gender disparities. Understanding the prevalence of such incidents can help inform targeted interventions and educational programs aimed at promoting responsible driving behavior, especially among younger male drivers. By identifying and addressing these specific challenges, we can work towards enhancing road safety and minimizing accidents caused by underage drivers, regardless of gender, in the context of Yerevan.
+
+To gain insights into the main locations of car accidents in Yerevan, we conducted a spatial analysis of the accident data. By mapping the geographic coordinates of the accidents, we can pinpoint the areas where these incidents are concentrated.
+
+The plot reveals several notable hotspots where car accidents are most prevalent in Yerevan. These locations may correspond to busy intersections, high-traffic areas, or regions with challenging road conditions. Identifying these hotspots is crucial for understanding the distribution of accidents and directing efforts towards targeted interventions to improve road safety.
+
+The concentration of accidents in specific areas highlights the need for traffic management strategies, road infrastructure improvements, and public awareness campaigns to mitigate risks and enhance safety in these locations. By addressing the factors contributing to accidents in these hotspots, we can work towards reducing the frequency and severity of car accidents, ultimately fostering safer road conditions for the residents of Yerevan.
 ```{r}
 grouped_data <- car_accidents_data_yerevan %>%
   group_by(accident_place) %>%
@@ -89,11 +113,15 @@ grouped_data <- car_accidents_data_yerevan %>%
   arrange(desc(num_accidents))
 
 # Print the grouped and ordered data
-head(grouped_data)
+ggplot(grouped_data, aes(x = reorder(accident_place, -num_accidents), y = num_accidents)) +
+  geom_bar(stat = "identity", fill = "skyblue", color = "black") +
+  labs(title = "Locations of Car Accidents in Yerevan",
+       x = "Accident Location",
+       y = "Number of Accidents") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
 ```
-
-
-
+To further analyze the trend specifically for female drivers, we can create another bar plot using ggplot to visualize the locations where car accidents happened involving female drivers in Yerevan. 
 ```{r}
 grouped_data_female <- car_accidents_data_yerevan %>%
   filter(gender == "Female") %>%
@@ -102,18 +130,22 @@ grouped_data_female <- car_accidents_data_yerevan %>%
   arrange(desc(num_accidents))
 
 # Print the grouped and ordered data
-head(grouped_data_female)
-```
+ggplot(grouped_data_female, aes(x = reorder(accident_place, -num_accidents), y = num_accidents)) +
+  geom_bar(stat = "identity", fill = "pink", color = "black") +
+  labs(title = "Locations of Car Accidents Involving Female Drivers in Yerevan",
+       x = "Accident Location",
+       y = "Number of Accidents") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
 
+```
+Here we can notice ,that main locations are the same and Miasnikyan street leads with a huge gap.Next, we will visualize the monthly accident counts in Yerevan.
 
 ```{r}
 grouped_data_month <- car_accidents_data_yerevan %>%
   group_by(months) %>%
   summarise(num_accidents = n()) %>%
   arrange(desc(num_accidents))
-
-# Print the grouped and ordered data
-head(grouped_data_month)
 ```
 
 ```{r}
@@ -125,7 +157,9 @@ ggplot(grouped_data_month, aes(x = months, y = num_accidents)) +
        y = "Number of Accidents") +  # Custom x-axis labels for months
   theme_minimal()
 ```
-here we can see that weather conditions do have influence on the accident numbers. It is logical that during december there are more accidents than during summer, however there is an outlier here. During April there is a anomally low number of accidents. What is the reason ? This is clearly not the weather, because during summer the weather is far better than during April One of the possible reasons can be spring break in schools and universities and not yet started turistic season in the city.
+The data illustrates the impact of weather conditions on accident numbers. It is expected that there would be more accidents during December compared to the summer months. However, there is an interesting outlier in April, where the number of accidents is surprisingly low. This anomaly cannot be attributed to weather, as the weather during summer is typically better than in April.
+
+if we take a look at the same data for only Myasnikyan street we observe the same picture.
 
 ```{r}
 
@@ -145,4 +179,28 @@ ggplot(mysanikyan_data, aes(x = months, y = num_accidents)) +
        y = "Number of Accidents") +  # Custom x-axis labels for months
   theme_minimal()
 ```
+
+However, the situation shifts when examining streets with generally low accident numbers. In these cases, the month of April does not appear as an outlier; instead, it aligns seamlessly with the overall pattern. This observation prompts the question of what factors might be influencing the accident trends on these streets during April.
+```{r}
+babajanyan_data <- car_accidents_data_yerevan %>%
+  filter(accident_place == "Babajanyan str.") %>%
+  group_by(months) %>%
+  summarise(num_accidents = n()) %>%
+  arrange(desc(num_accidents))
+  
+
+
+ggplot(mbabajanyan_data, aes(x = months, y = num_accidents)) +
+  geom_line() +
+  geom_point() +
+  labs(title = "Number of Accidents by Month(Babajanyan str.)",
+       x = "Month",
+       y = "Number of Accidents") +  # Custom x-axis labels for months
+  theme_minimal()
+```
+Allow us to delve into the context a bit further. A plausible reason for the reduced accident rate in April could be attributed to the occurrence of spring breaks in schools and universities during that period, leading to less traffic and potentially fewer accidents.
+
+However, an essential factor that could have significantly impacted the situation is the Revolution that took place in 2018, spanning from 31st March to 8th May, which coincides with the entire month of April. During this Revolution, strategic measures were implemented to disrupt car movement in the city, with major arteries deliberately closed off, including the Myasnikyan street.
+
+These revolutionary actions likely had a game-changing effect on the traffic dynamics and contributed to the observed reduction in accident occurrences during April. The deliberate disruption of car movement and road closures on key routes might explain the correlation between the Revolution's timing and the decrease in accidents during that particular month.
 

@@ -1,5 +1,4 @@
 # app.R
-# 1234
 # Load the required libraries
 library(shiny)
 
@@ -10,3 +9,4 @@ source("server.R")
 
 # Run the app
 shinyApp(ui, server)
+ 
