@@ -190,7 +190,7 @@ babajanyan_data <- car_accidents_data_yerevan %>%
   
 
 
-ggplot(mbabajanyan_data, aes(x = months, y = num_accidents)) +
+ggplot(babajanyan_data, aes(x = months, y = num_accidents)) +
   geom_line() +
   geom_point() +
   labs(title = "Number of Accidents by Month(Babajanyan str.)",
