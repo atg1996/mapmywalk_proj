@@ -1,6 +1,12 @@
 # Function to parse TCX data
 parseTCXData <- function(file) {
-  tcx <- readTCX(file$datapath, timezone = "GMT")
+  tcx <- readTCX(file, timezone = "GMT")
+  
+  # Calculate the minimum starting time among all TCX files
+  min_time <- min(tcx$time)
+  
+  # Adjust the Time values by subtracting min_time
+  tcx$time <- tcx$time - min_time
   
   time <- tcx$time
   distance <- tcx$distance
@@ -9,6 +15,7 @@ parseTCXData <- function(file) {
   data <- data.frame(Time = time, DistanceMeters = distance, Altitude = altitude)
   return(data)
 }
+
 
 readMapMyWalkCSV <- function(file_path) {
   df <- read.csv(file_path, stringsAsFactors = FALSE)
@@ -29,79 +36,88 @@ extractGPSData <- function(data) {
 server <- function(input, output) {
 
   
-  # Generate distance over time plot
   output$distance_plot <- renderPlot({
-    req(input$file)
+    req(input$files)
     
-    data <- parseTCXData(input$file)
+    # Combine data from all TCX files
+    combined_data <- do.call(rbind, lapply(input$files$datapath, function(file_path) {
+      data <- parseTCXData(file_path)
+      data$File <- basename(file_path)  # Add a column to identify the file
+      return(data)
+    }))
     
-    ggplot(data, aes(x = Time, y = DistanceMeters)) +
+    ggplot(combined_data, aes(x = Time, y = DistanceMeters, color = File)) +
       geom_line() +
       labs(x = "Time", y = "Distance (Meters)", title = "Distance passed over time") +
       theme_bw()
   })
   
+  # Generate altitude over time plot for multiple files
   output$altitude_plot <- renderPlot({
-    req(input$file)
-    
-    data <- parseTCXData(input$file)
-    
-    ggplot(data, aes(x = Time, y = Altitude)) +
+    req(input$files)
+    combined_data <- do.call(rbind, lapply(input$files$datapath, function(file_path) {
+      data <- parseTCXData(file_path)
+      data$File <- basename(file_path)
+      return(data)
+    }))
+    ggplot(combined_data, aes(x = Time, y = Altitude, color = File)) +
       geom_line() +
-      labs(x = "Time", y = "Altitude (Meters)", title = "Change of altitude durinng walk") +
+      labs(x = "Time", y = "Altitude (Meters)", title = "Change of altitude during walk") +
       theme_bw()
   })
   
-  #generate density plot
+  # Generate density plot for multiple files
   output$density_plot_ggplot <- renderPlot({
-    req(input$file)
-    data <- parseTCXData(input$file)
-    
-    ggplot(data, aes(x = Time, y = DistanceMeters)) +
+    req(input$files)
+    combined_data <- do.call(rbind, lapply(input$files$datapath, function(file_path) {
+      data <- parseTCXData(file_path)
+      data$File <- basename(file_path)
+      return(data)
+    }))
+    ggplot(combined_data, aes(x = Time, y = DistanceMeters, color = File)) +
       geom_density_2d() +
       labs(x = "Time", y = "Distance (Meters)", title = "Density Plot of GPS Points") +
       theme_bw()
   })
   
-  #generate pace plot
+  # Generate pace plot for multiple files
   output$pace_plot <- renderPlot({
-    req(input$file)
+    req(input$files)
+    combined_data <- do.call(rbind, lapply(input$files$datapath, function(file_path) {
+      data <- parseTCXData(file_path)
+      data$DistanceCovered <- c(0, diff(data$DistanceMeters))
+      data$File <- basename(file_path)
+      return(data)
+    }))
     
-    data <- parseTCXData(input$file)
+    combined_data$File <- factor(combined_data$File)  # Convert File to a factor
     
-    # Calculate distance covered between consecutive points
-    data$DistanceCovered <- c(0, diff(data$DistanceMeters))
-    
-    # Create a scatter plot for distance covered
-    ggplot(data, aes(x = as.POSIXct(Time, origin = "1970-01-01"), y = DistanceCovered)) +
-      geom_point(color = "blue") +
+    ggplot(combined_data, aes(x = Time, y = DistanceCovered, group = File, color = File)) +
+      geom_point() +
+      geom_line() +
       labs(x = "Time", y = "Distance Covered (Meters)", title = "Distance Covered between neighbor Points") +
-      scale_x_datetime(date_breaks = "1 hour", date_labels = "%H:%M") +
       theme_bw()
   })
   
   #functionality connected with map generation
-  observeEvent(input$file, {
-    req(input$file$datapath) 
-    tcx_data <- readTCX(input$file$datapath) 
-    gps_data <- extractGPSData(tcx_data)
+  observeEvent(input$files, {
+    req(input$files)
+    map <- leaflet() %>%
+      addProviderTiles(provider = "Esri.WorldGrayCanvas")
     
-    # Get the start and end coordinates
-    start_lat <- gps_data$latitude[1]
-    start_lng <- gps_data$longitude[1]
-    end_lat <- gps_data$latitude[nrow(gps_data)]
-    end_lng <- gps_data$longitude[nrow(gps_data)]
-    
-    # Plot the GPS data on the map
-    output$map <- renderLeaflet({
-      leaflet() %>%
-        addProviderTiles(provider = "Esri.WorldGrayCanvas") %>%
+    for (file_path in input$files$datapath) {
+      tcx_data <- readTCX(file_path)
+      gps_data <- extractGPSData(tcx_data)
+      map <- map %>%
         addPolylines(data = gps_data, lat = ~latitude, lng = ~longitude, 
-                     color = "red", weight = 3) %>%
-        addMarkers(lat = start_lat, lng = start_lng, label = "Start",
+                     color = sample(rainbow(length(input$files$datapath))), weight = 3) %>%
+        addMarkers(lat = gps_data$latitude[1], lng = gps_data$longitude[1], label = "Start",
                    icon = leaflet::makeIcon(iconUrl = "https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-green.png")) %>%
-        addMarkers(lat = end_lat, lng = end_lng, label = "End",
+        addMarkers(lat = gps_data$latitude[nrow(gps_data)], lng = gps_data$longitude[nrow(gps_data)], label = "End",
                    icon = leaflet::makeIcon(iconUrl = "https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-red.png"))
-    })
+      
+    }
+      
+    output$map <- renderLeaflet({ map })
   })
-}
+  }

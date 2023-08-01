@@ -12,7 +12,7 @@ ui <- tagList(
       sidebarPanel(
         fluidRow(
           column(width = 12,
-                 fileInput("file", "Upload TCX file"),
+                 fileInput("files", "Upload TCX files", multiple = TRUE),
                  leafletOutput("map"))
         ),
         fluidRow(
