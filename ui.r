@@ -83,7 +83,7 @@ ui <- tagList(
       )
     )
   ),
-  tabPanel("Walking Data Analysis")
+  tabPanel("Car Accident Data Analysis")
     )
   )
 )
