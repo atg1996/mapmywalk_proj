@@ -2,12 +2,12 @@
 title: "Exploring Key Factors Contributing to Car Accidents in Yerevan and Dispelling Correlation Myths"
 output: pdf_document
 author: "Hovhannes Garoyan, Hrach Khachatryan, Asya Khachatryan, Davit Nazaryan, Tigran Asatryan"
-date: "2023-07-29"
+date: "2023-08-02"
 ---
-Abstract:
+**Abstract:**
 This data research report investigates the factors influencing car accidents in the city of Yerevan. By analyzing a comprehensive dataset, this study aims to identify the key contributors to car accidents and debunk any correlation myths associated with accident occurrences. The findings from this research can serve as valuable insights for implementing targeted road safety measures and enhancing accident prevention strategies in Yerevan.
 
-Data Description:
+**Data Description:**
 The dataset comprises a comprehensive collection of car accident records, including demographic information about drivers such as gender and age. It also encompasses data about the vehicles involved, such as car brand and year of production. Additionally, the dataset contains information about the accident locations, specifying regions and streets, as well as the month in which the accidents occurred. Prior to analysis, standard data preprocessing techniques were employed to address any missing values and ensure consistency in data types.
 
 ```{r setup, include=FALSE}
@@ -21,7 +21,7 @@ library(ggplot2)
 library(dplyr)
 library(leaflet)
 ```
-Introduction:
+**Introduction:**
 Armenia, formerly part of the Soviet Union, witnessed a notable surge in automobile ownership following the collapse of the USSR. However, during the 1990s, the country faced significant challenges in organizing road safety measures, resulting in a high incidence of road fatalities among its citizens. The rugged terrain, particularly in the southern provinces of Vayots Dzor and Syunik, further compounded the road safety concerns. Notably, these regions play a critical role as they serve as the primary transportation link connecting Yerevan, the capital city, with Iran.
 
 Subsequently, in the late 2000s and early 2010s, the automobile ownership rates experienced further growth, reaching a peak around 2017-18. This surge in vehicle numbers led to increased traffic congestion and a rise in car accidents in Yerevan. The influx of affordable cars mainly originated from countries such as Germany, Korea, Japan, USA, and Russia.
