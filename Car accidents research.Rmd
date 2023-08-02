@@ -26,7 +26,8 @@ Armenia, formerly part of the Soviet Union, witnessed a notable surge in automob
 
 Subsequently, in the late 2000s and early 2010s, the automobile ownership rates experienced further growth, reaching a peak around 2017-18. This surge in vehicle numbers led to increased traffic congestion and a rise in car accidents in Yerevan. The influx of affordable cars mainly originated from countries such as Germany, Korea, Japan, USA, and Russia.
 
-In the context of this research, our focus lies on the period after 2015, with particular attention to the Yerevan area. Understanding the dynamics of automobile usage and accident patterns in this specific timeframe and geographical region is of primary interest in our study.
+
+The context of the research is centered around road safety and car accidents in Yerevan, Armenia, particularly focusing on the period after 2015. The study aims to understand the dynamics of automobile usage, accident patterns, and the impact of increased car ownership in the city. It also highlights the challenges faced in organizing road safety measures in Armenia, particularly during the 1990s, and the role of rugged terrain in certain regions as a factor influencing road safety concerns.
 
 
 ```{r}
@@ -93,17 +94,19 @@ ggplot(car_accidents_data_yerevan, aes(x = car_year, y = age, color = gender)) +
        color = "Gender") +
   theme_minimal()
 ```
+
+
 The visualization(Fig.4) provides valuable insights into the distribution of female drivers across various age groups and the types of cars they drive, including both new and old vehicles. Notably, female drivers are present across all age categories, suggesting their active involvement in driving across different stages of life and with diverse car models.
 
 An essential observation from the chart is that some of the accidents were caused by underage drivers. In this specific age group, male drivers dominate the statistics, with only one reported case of an underage female driver involved in an accident in Yerevan.
 
 This data highlights the significance of addressing the issue of underage driving and its potential association with gender disparities. Understanding the prevalence of such incidents can help inform targeted interventions and educational programs aimed at promoting responsible driving behavior, especially among younger male drivers. By identifying and addressing these specific challenges, we can work towards enhancing road safety and minimizing accidents caused by underage drivers, regardless of gender, in the context of Yerevan.
-
 To gain insights into the main locations of car accidents in Yerevan, we conducted a spatial analysis of the accident data. By mapping the geographic coordinates of the accidents, we can pinpoint the areas where these incidents are concentrated.
 
 The plot(Fig.5) reveals several notable hotspots where car accidents are most prevalent in Yerevan. These locations may correspond to busy intersections, high-traffic areas, or regions with challenging road conditions. Identifying these hotspots is crucial for understanding the distribution of accidents and directing efforts towards targeted interventions to improve road safety.
 
 The concentration of accidents in specific areas highlights the need for traffic management strategies, road infrastructure improvements, and public awareness campaigns to mitigate risks and enhance safety in these locations. By addressing the factors contributing to accidents in these hotspots, we can work towards reducing the frequency and severity of car accidents, ultimately fostering safer road conditions for the residents of Yerevan.
+
 ```{r}
 grouped_data <- car_accidents_data_yerevan %>%
   group_by(accident_place) %>%
@@ -170,12 +173,13 @@ mysanikyan_data <- car_accidents_data_yerevan %>%
 
 
 ggplot(mysanikyan_data, aes(x = months, y = num_accidents)) +
-  geom_line() +
-  geom_point() +
-  labs(title = "(Fig.8) Number of Accidents by Month(Myasnikyan)",
+  geom_line(aes(group = 1)) +  # Add group = 1 to connect data points with a line
+  geom_point(aes(group = 1)) +  # Add group = 1 to show data points
+  labs(title = "(Fig.8) Number of Accidents by Month (Myasnikyan)",
        x = "Month",
-       y = "Number of Accidents") +  # Custom x-axis labels for months
+       y = "Number of Accidents") +
   theme_minimal()
+
 ```
 
 However, the situation shifts when examining streets with generally low accident numbers(Fig.9). In these cases, the month of April does not appear as an outlier; instead, it aligns seamlessly with the overall pattern. This observation prompts the question of what factors might be influencing the accident trends on these streets during April.
@@ -202,7 +206,9 @@ However, an essential factor that could have significantly impacted the situatio
 
 These revolutionary actions likely had a game-changing effect on the traffic dynamics and contributed to the observed reduction in accident occurrences during April. The deliberate disruption of car movement and road closures on key routes might explain the correlation between the Revolution's timing and the decrease in accidents during that particular month.
 
-Conclusion:
+**Conclusion:**
 
-In conclusion, the research sheds light on the complex interplay of factors influencing car accidents in Yerevan and emphasizes the significance of targeted interventions, public awareness campaigns, and policy measures to improve road safety and reduce accident occurrences. By understanding the dynamics of automobile usage and accident patterns, authorities can implement effective strategies to foster safer road conditions for the residents of Yerevan.
+In conclusion, this research sheds light on the factors influencing car accidents in Yerevan, with 88 percent of accidents occurring on Myasnikyan street. Targeted interventions, public awareness campaigns, and policy measures are essential to improve road safety and reduce accidents. Understanding accident patterns will help authorities implement effective strategies for safer roads in Yerevan.
+
+
 
