@@ -120,4 +120,91 @@ server <- function(input, output) {
       
     output$map <- renderLeaflet({ map })
   })
+  
+  #Car crash functionality starts here
+  
+  # Reactive input to read the uploaded Excel file
+  xlsx_input <- reactive({
+    req(input$xlsx_input)
+    read_excel(input$xlsx_input$datapath, sheet = 1)
+  })
+  
+  # Create the bar plot
+  output$car_crash_gender_plot <- renderPlot({
+    # Filter the data for Yerevan region
+    yerevan_data <- subset(xlsx_input(), region == "Yerevan")
+    
+    # Group the data by gender and calculate the counts
+    gender_counts <- yerevan_data %>%
+      group_by(gender) %>%
+      summarize(count = n())
+    
+    # Create a bar plot
+    ggplot(gender_counts, aes(x = gender, y = count)) +
+      geom_bar(stat = "identity", fill = "skyblue") +
+      labs(title = "Car Crash Counts by Gender in Yerevan",
+           x = "Gender",
+           y = "Count") +
+      theme_minimal()
+  })
+
+  
+  # Create the scatter plot
+  output$car_crash_car_age_distribution_plot <- renderPlot({
+    # Filter the data for Yerevan region
+    yerevan_data <- subset(xlsx_input(), region == "Yerevan")
+    
+    # Create the scatter plot
+    ggplot(yerevan_data, aes(x = car_year, y = age, color = gender)) +
+      geom_point() +
+      labs(title = "Car Age Distribution vs. Driver's Age in Yerevan",
+           x = "Car Year",
+           y = "Driver's Age",
+           color = "Gender") +
+      theme_minimal()
+  })
+  
+  
+  # Create the bar plot
+  output$car_crash_monthly_divided_plot <- renderPlot({
+    # Filter the data for Yerevan region
+    yerevan_data <- subset(xlsx_input(), region == "Yerevan")
+    
+    # Group the data by month and count the number of car crashes per month
+    monthly_counts <- yerevan_data %>%
+      group_by(months) %>%
+      summarise(num_accidents = n())
+    
+    # Create the bar plot
+    ggplot(monthly_counts, aes(x = months, y = num_accidents)) +
+      geom_line() +
+      geom_point() +
+      labs(title = "Number of Accidents by Month(Yerevan)",
+           x = "Month",
+           y = "Number of Accidents") +
+      theme_minimal()
+  })
+  
+  output$car_crash_monthly_divided_sm_plot <- renderPlot({
+    # Filter the data for Yerevan region
+    yerevan_data <- subset(xlsx_input(), region == "Yerevan")
+    
+    # Group the data by month and count the number of car crashes per month
+    monthly_counts <- yerevan_data %>%
+    filter(accident_place == "Babajanyan str.") %>%
+      group_by(months) %>%
+      summarise(num_accidents = n())
+    
+    # Create the bar plot
+    ggplot(monthly_counts, aes(x = months, y = num_accidents)) +
+      geom_line() +
+      geom_point() +
+      labs(title = "(Fig.9) Number of Accidents by Month(Babajanyan str.)",
+           x = "Month",
+           y = "Number of Accidents") +  # Custom x-axis labels for months
+      theme_minimal()
+  })
+  
+  
+  
   }

@@ -36,7 +36,8 @@ ui <- tagList(
                  h6("The second chart illustrates the density of GPS points.
                  Observing peaks in this graph allows us to cross-reference
                  with the preceding chart to discern potential areas of concern,
-                 such as road crossings or issues related to pavement quality."),
+                 such as road crossings or issues related to pavement quality.
+                 "),
                  
                  h6("The third chart depicts the altitude gain during the walk,
                  an invaluable metric to consider, especially concerning
@@ -45,6 +46,7 @@ ui <- tagList(
                  challenges, making this data critical for pedestrian accessibility
                  assessments.
                  "),
+                 
                  h6("The fourth chart provides a more detailed analysis of pace
                  variations during the walk, offering valuable insights into
                  pedestrian experience and pavement conditions. A relatively
@@ -83,7 +85,67 @@ ui <- tagList(
       )
     )
   ),
-  tabPanel("Car Accident Data Analysis")
-    )
+  tabPanel("Car Accident Data Analysis",
+           sidebarLayout(
+             sidebarPanel(
+               fluidRow(
+                 column(width = 12,
+                        fileInput("xlsx_input", "Upload car accident data file"),
+                        )
+               ),
+               fluidRow(
+                 column(width = 12,
+                        h4("How the data is being analyzed?"),
+                        
+                        h6("This data research report investigates the factors
+                           influencing car accidents in the city of Yerevan.
+                           By analyzing a comprehensive dataset, this study
+                           aims to identify the key contributors to car
+                           accidents and debunk any correlation myths associated
+                           with accident occurrences. The findings from this 
+                           research can serve as valuable insights for implementing
+                           targeted road safety measures and enhancing accident
+                           prevention strategies in Yerevan."),
+                        
+                        
+                        
+                        h6("The dataset comprises a comprehensive collection of car
+                           accident records, including demographic information about
+                           drivers such as gender and age. It also encompasses data
+                           about the vehicles involved, such as car brand and year
+                           of production. Additionally, the dataset contains information
+                           about the accident locations, specifying regions and streets,
+                           as well as the month in which the accidents occurred. Prior
+                           to analysis, standard data preprocessing techniques were
+                           employed to address any missing values and ensure consistency
+                           in data types.")),
+                 
+               ),
+             ),
+             mainPanel(
+               fluidRow(
+                 column(width = 6,
+                        plotOutput("car_crash_gender_plot")
+                        
+                 ),
+                 column(width = 6,
+                        plotOutput("car_crash_car_age_distribution_plot")
+                        
+                 )
+               ),
+               fluidRow(
+                 column(width = 6,
+                        plotOutput("car_crash_monthly_divided_plot")
+                        
+                 ),
+                 column(width = 6,
+                        plotOutput("car_crash_monthly_divided_sm_plot")
+                        
+                 )
+               )
+             )
+           )
+        )
+     )
   )
 )
