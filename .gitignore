@@ -3,3 +3,5 @@
 .RData
 .Ruserdata
 Car accidents.xlsx
+deploy.R
+/rsconnect
